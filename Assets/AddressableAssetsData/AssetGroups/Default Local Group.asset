@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 3c0c0634973d2c945ba7e667e7671740
+  m_SerializeEntries:
+  - m_GUID: 2fee463d097d4b741b15696a08e54c4a
+    m_Address: Assets/Project/Prefabs/Game/Spawner.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b59a5ddf6721fbb4cb9971cce14260c0
+    m_Address: Assets/Project/Prefabs/Game/Item.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 063178460a8c00544b1d9fa489c8ad43, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: a71e167354ace754dac201141df2b90a, type: 2}
+    - {fileID: 11400000, guid: 90d474977e6dd794887c964c1c1776ed, type: 2}
