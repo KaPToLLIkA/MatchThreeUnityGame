@@ -12,13 +12,13 @@ namespace Project.Scripts.Game
             {
                 for (int x = 0; x < columns; ++x)
                 {
-                    if (y == 0)
+                    if (y == rows - 1)
                     {
-                        field[x, y] = CellType.Spawner;
+                        field[y, x] = CellType.Spawner;
                     }
                     else
                     {
-                        field[x, y] = Field.ItemsTypes[Random.Range(0, Field.ItemsTypes.Length)];
+                        field[y, x] = Field.ItemsTypes[Random.Range(0, Field.ItemsTypes.Length)];
                     }
                 }
             }

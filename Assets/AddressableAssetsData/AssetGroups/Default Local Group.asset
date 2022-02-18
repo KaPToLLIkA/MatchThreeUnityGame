@@ -16,15 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 3c0c0634973d2c945ba7e667e7671740
-  m_SerializeEntries:
-  - m_GUID: 2fee463d097d4b741b15696a08e54c4a
-    m_Address: Assets/Project/Prefabs/Game/Spawner.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: b59a5ddf6721fbb4cb9971cce14260c0
-    m_Address: Assets/Project/Prefabs/Game/Item.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 063178460a8c00544b1d9fa489c8ad43, type: 2}
   m_SchemaSet:
