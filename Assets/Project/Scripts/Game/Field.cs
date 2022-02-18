@@ -68,6 +68,39 @@ namespace Project.Scripts.Game
             );
         }
 
+
+        public bool ContainsAnyMovable()
+        {
+            for (int y = 0; y < Rows; ++y)
+            {
+                for (int x = 0; x < Columns; ++x)
+                {
+                    if (items[y, x] != null && items[y, x].Movable)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool ContainsAnyEmpty()
+        {
+            for (int y = 0; y < Rows; ++y)
+            {
+                for (int x = 0; x < Columns; ++x)
+                {
+                    if (cells[y, x] != CellType.Spawner && items[y, x] == null)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public void InstantiateItems(GameObject item, GameObject spawner)
         {
             items = new ItemController[Rows, Columns];

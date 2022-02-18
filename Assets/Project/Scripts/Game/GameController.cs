@@ -40,13 +40,13 @@ namespace Project.Scripts.Game
 
         private void Update()
         {
+            if (_field.ContainsAnyEmpty()) return;
             var coords = _field.GetAnyFigureCoords(lineLength);
-            if (coords.Count >= lineLength)
+            
+            if (coords.Count < lineLength) return;
+            foreach (var coord in coords)
             {
-                foreach (var coord in coords)
-                {
-                    _field[coord].Explode();
-                }
+                _field[coord].Explode();
             }
         }
     }

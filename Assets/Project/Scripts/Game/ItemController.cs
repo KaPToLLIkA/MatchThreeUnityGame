@@ -23,14 +23,18 @@ namespace Project.Scripts.Game
         public AnimationCurve explodeScaleCurve;
         public Vector3 explodeScaleTarget = new Vector3(0, 0, 0);
         public float explodeScaleSpeed = 1f;
+        [Space(10)] 
+        public AnimationCurve moveDownCurve;
+        public float moveDownSpeed = 1f;
         
-        public CellType Type => _type;
-        
-        private CellType _type;
+        public CellType Type { get; private set; }
+
+        public bool Movable { get; private set; } = false;
+
         private Field _field;
         private int _x;
         private int _y;
-        
+
         private SpriteRenderer _spriteRenderer;
 
         public void Init(int x, int y, Field field, CellType type)
@@ -38,9 +42,9 @@ namespace Project.Scripts.Game
             _x = x;
             _y = y;
             _field = field;
-            _type = type;
+            Type = type;
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            var row = sprites.Find(item => item.cellType == _type);
+            var row = sprites.Find(item => item.cellType == Type);
             _spriteRenderer.sprite = row.sprite;
 
             var maxDimension = (float)Mathf.Max(row.sprite.rect.width, row.sprite.rect.height);
@@ -56,9 +60,32 @@ namespace Project.Scripts.Game
             StartCoroutine(AsyncExplode());
         }
 
+        private void Update()
+        {
+            if (!Movable && _y - 1 >= 0 && _field[_x, _y - 1] == null)
+            {
+                StartCoroutine(AsyncMoveDown());
+            }
+        }
+
+        private IEnumerator AsyncMoveDown()
+        {
+            Movable = true;
+            var pos = _field.GetCellWorldPos(_x, _y - 1);
+
+            yield return StartCoroutine(
+                Animations.MoveAnimator(gameObject, pos, moveDownCurve, moveDownSpeed));
+
+            _field[_x, _y] = null;
+            _field[_x, _y - 1] = this;
+            _y -= 1;
+            Movable = false;
+        }
+
         private IEnumerator AsyncExplode()
         {
-            yield return Animations.ScaleAnimator(gameObject, explodeScaleTarget, explodeScaleCurve, explodeScaleSpeed);
+            yield return StartCoroutine(
+                Animations.ScaleAnimator(gameObject, explodeScaleTarget, explodeScaleCurve, explodeScaleSpeed));
 
             _field[_x, _y] = null;
             
