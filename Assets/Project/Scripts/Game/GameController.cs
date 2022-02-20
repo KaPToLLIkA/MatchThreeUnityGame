@@ -41,12 +41,15 @@ namespace Project.Scripts.Game
         private void Update()
         {
             if (_field.ContainsAnyEmpty()) return;
-            var coords = _field.GetAnyFigureCoords(lineLength);
+            var figures = _field.GetAllFigures(lineLength);
             
-            if (coords.Count < lineLength) return;
-            foreach (var coord in coords)
+            if (figures.Count == 0) return;
+            foreach (var figure in figures)
             {
-                _field[coord].Explode();
+                foreach (var coord in figure.Coords)
+                {
+                    _field[coord].Explode();
+                }
             }
         }
     }

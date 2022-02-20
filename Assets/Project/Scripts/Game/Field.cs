@@ -15,6 +15,22 @@ namespace Project.Scripts.Game
         Magenta
     }
 
+    public class Figure
+    {
+        public List<Vector2Int> Coords { get; } = new List<Vector2Int>();
+
+        public Vector2Int this[int i]
+        {
+            get => Coords[i];
+            set => Coords[i] = value;
+        }
+
+        public Figure(List<Vector2Int> coords)
+        {
+            Coords = coords;
+        }
+    }
+    
     public class Field
     {
         public static CellType[] ItemsTypes { get; } =
@@ -128,28 +144,39 @@ namespace Project.Scripts.Game
             }
         }
 
-        public List<Vector2Int> GetAnyFigureCoords(int length)
+        public Figure GetAnyFigureAt(int x, int y, int length)
         {
             var coords = new List<Vector2Int>();
+            var visited = new bool[Rows, Columns];
+            LineFigureSearch(x, y, length, coords, visited);
+            return new Figure(coords);
+        }
+        
+        public List<Figure> GetAllFigures(int minLength)
+        {
+            var figures = new List<Figure>();
+            var isFigure = new bool[Rows, Columns];
             
             for (int y = 0; y < Rows; ++y)
             {
-                coords.Clear();
                 var visited = new bool[Rows, Columns];
+                
                 for (int x = 0; x < Columns; ++x)
                 {
-                    if (items[y, x] != null)
+                    var coords = new List<Vector2Int>();
+                    if (items[y, x] != null && !isFigure[y, x])
                     {
-                        LineFigureSearch(x, y, length, coords, visited);
-                        if (coords.Count >= length)
+                        LineFigureSearch(x, y, minLength, coords, visited);
+                        if (coords.Count >= minLength)
                         {
-                            return coords;
+                            figures.Add(new Figure(coords));
+                            coords.ForEach(c => isFigure[c.y, c.x] = true);
                         }
                     }
                 }
             }
 
-            return coords;
+            return figures;
         }
 
         private bool CheckBounds(ref Vector2Int coord)
@@ -232,7 +259,11 @@ namespace Project.Scripts.Game
             coords = (new HashSet<Vector2Int>(coords.ToList())).ToList();
         }
 
-        private void FindAllNeighbours(CellType target, List<Vector2Int> coords, HashSet<Vector2Int> neighbours, bool[,] visited)
+        private void FindAllNeighbours(
+            CellType target, 
+            List<Vector2Int> coords, 
+            HashSet<Vector2Int> neighbours, 
+            bool[,] visited)
         {
             var queue = new Queue<Vector2Int>(neighbours.ToList());
             while (queue.Count > 0)
