@@ -46,7 +46,9 @@ namespace Project.Scripts.Game
         public float CellSize => worldCellSize;
         public GameObject FieldGameObject => fieldGameObject;
         
+        // static in game objects
         private CellType[,] cells;
+        // dynamic in game objects
         private ItemController[,] items;
 
         private Vector2 worldFieldSize;

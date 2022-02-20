@@ -10,11 +10,14 @@ public class ScalableBG : MonoBehaviour
 
     private Sprite _sprite;
     private float _scale;
+    private float _camHeight;
     
     private void Start()
     {
         _sprite = GetComponent<SpriteRenderer>().sprite;
         _scale = CalculateScale();
+        var currentCam = Camera.main;
+        _camHeight = currentCam.orthographicSize * 2;
         transform.localScale = new Vector3(_scale, _scale, 1);
     }
 
@@ -28,11 +31,7 @@ public class ScalableBG : MonoBehaviour
 
     private float CalculateScale()
     {
-        var currentCam = Camera.main;
-        var camHeight = currentCam.orthographicSize * 2;
-
         var sHeight = _sprite.texture.height / pixelsPerUnit;
-
-        return camHeight / sHeight;
+        return _camHeight / sHeight;
     }
 }
