@@ -232,10 +232,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bb14a718eb4469abc1ce44164b9dc78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellSize: 0.4
+  cellSize: 0.7
   cellsPadding: 0.06
-  rows: 12
-  columns: 10
+  rows: 8
+  columns: 6
   itemPrefab: {fileID: 2534813774481603782, guid: b59a5ddf6721fbb4cb9971cce14260c0, type: 3}
   spawnerPrefab: {fileID: 1849732304386220250, guid: 2fee463d097d4b741b15696a08e54c4a, type: 3}
   fieldGameObject: {fileID: 1445890526}
@@ -478,7 +478,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2138171840}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

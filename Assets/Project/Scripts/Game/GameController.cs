@@ -21,6 +21,7 @@ namespace Project.Scripts.Game
         public int lineLength = 3;
         
         private Field _field;
+        private CellSelector _cellSelector;
         private Vector2 _fieldSize;
 
         private void Awake()
@@ -29,8 +30,9 @@ namespace Project.Scripts.Game
             _fieldSize = new Vector2(
                 columns * (cellSize + cellsPadding) + cellsPadding,
                 rows * (cellSize + cellsPadding) + cellsPadding);
-            _field = new Field(cells, _fieldSize, cellSize, cellsPadding, fieldGameObject);
-            _field.InstantiateItems(itemPrefab, spawnerPrefab);
+            _field = new Field(lineLength, cells, _fieldSize, cellSize, cellsPadding, fieldGameObject);
+            _cellSelector = new CellSelector();
+            _field.InstantiateItems(itemPrefab, spawnerPrefab, _cellSelector);
         }
 
         private void Start()
@@ -41,7 +43,8 @@ namespace Project.Scripts.Game
         private void Update()
         {
             if (_field.ContainsAnyEmpty()) return;
-            var figures = _field.GetAllFigures(lineLength);
+            if (_field.ContainsAnyMovable()) return;
+            var figures = _field.GetAllFigures();
             
             if (figures.Count == 0) return;
             foreach (var figure in figures)

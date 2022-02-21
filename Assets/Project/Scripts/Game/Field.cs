@@ -45,6 +45,7 @@ namespace Project.Scripts.Game
         public int Columns => cells.GetLength(1);
         public float CellSize => worldCellSize;
         public GameObject FieldGameObject => fieldGameObject;
+        public int MinFigureLength => minFigureLenght;
         
         // static in game objects
         private CellType[,] cells;
@@ -55,15 +56,24 @@ namespace Project.Scripts.Game
         private float worldCellSize;
         private float worldCellsPadding;
 
+        private int minFigureLenght;
+
         private GameObject fieldGameObject;
         
-        public Field(CellType[,] cells, Vector2 fieldSize, float cellSize, float padding, GameObject field)
+        public Field(
+            int minFigureLenght, 
+            CellType[,] cells, 
+            Vector2 fieldSize, 
+            float cellSize, 
+            float padding, 
+            GameObject field)
         {
             this.cells = cells;
             this.worldCellSize = cellSize;
             this.worldFieldSize = fieldSize;
             this.worldCellsPadding = padding;
             this.fieldGameObject = field;
+            this.minFigureLenght = minFigureLenght;
         }
 
         public ItemController this[int x, int y]
@@ -119,7 +129,7 @@ namespace Project.Scripts.Game
             return false;
         }
 
-        public void InstantiateItems(GameObject item, GameObject spawner)
+        public void InstantiateItems(GameObject item, GameObject spawner, CellSelector selector)
         {
             items = new ItemController[Rows, Columns];
             
@@ -132,7 +142,7 @@ namespace Project.Scripts.Game
                     {
                         var spawnerGO = 
                             Object.Instantiate(spawner, pos, Quaternion.identity, fieldGameObject.transform);
-                        spawnerGO.GetComponent<SpawnerController>().Init(x, y, this);
+                        spawnerGO.GetComponent<SpawnerController>().Init(x, y, this, selector);
                         items[y, x] = null;
                     }
                     else
@@ -140,21 +150,21 @@ namespace Project.Scripts.Game
                         var itemGO = 
                             Object.Instantiate(item, pos, Quaternion.identity, fieldGameObject.transform);
                         items[y, x] = itemGO.GetComponent<ItemController>();
-                        items[y, x].Init(x, y, this, cells[y, x]);
+                        items[y, x].Init(x, y, this, cells[y, x], selector);
                     }
                 }
             }
         }
 
-        public Figure GetAnyFigureAt(int x, int y, int length)
+        public Figure GetAnyFigureAt(Vector2Int coord)
         {
             var coords = new List<Vector2Int>();
             var visited = new bool[Rows, Columns];
-            LineFigureSearch(x, y, length, coords, visited);
+            LineFigureSearch(coord.x, coord.y, minFigureLenght, coords, visited);
             return new Figure(coords);
         }
         
-        public List<Figure> GetAllFigures(int minLength)
+        public List<Figure> GetAllFigures()
         {
             var figures = new List<Figure>();
             var isFigure = new bool[Rows, Columns];
@@ -168,8 +178,8 @@ namespace Project.Scripts.Game
                     var coords = new List<Vector2Int>();
                     if (items[y, x] != null && !isFigure[y, x])
                     {
-                        LineFigureSearch(x, y, minLength, coords, visited);
-                        if (coords.Count >= minLength)
+                        LineFigureSearch(x, y, minFigureLenght, coords, visited);
+                        if (coords.Count >= minFigureLenght)
                         {
                             figures.Add(new Figure(coords));
                             coords.ForEach(c => isFigure[c.y, c.x] = true);

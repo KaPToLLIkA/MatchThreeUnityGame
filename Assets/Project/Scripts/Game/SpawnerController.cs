@@ -9,12 +9,14 @@ namespace Project.Scripts.Game
         private Field _field;
         private int _x;
         private int _y;
+        private CellSelector _selector;
 
-        public void Init(int x, int y, Field field)
+        public void Init(int x, int y, Field field, CellSelector selector)
         {
             _x = x;
             _y = y;
             _field = field;
+            _selector = selector;
         }
 
         private void SpawnAt(int x, int y)
@@ -23,7 +25,7 @@ namespace Project.Scripts.Game
             var itemGO = 
                 Instantiate(item, pos, Quaternion.identity, _field.FieldGameObject.transform);
             _field[x, y] = itemGO.GetComponent<ItemController>();
-            _field[x, y].Init(x, y, _field, Field.GetRandomType());
+            _field[x, y].Init(x, y, _field, Field.GetRandomType(), _selector);
         }
         
         private void Update()
