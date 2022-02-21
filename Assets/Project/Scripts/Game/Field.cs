@@ -176,9 +176,10 @@ namespace Project.Scripts.Game
                 for (int x = 0; x < Columns; ++x)
                 {
                     var coords = new List<Vector2Int>();
-                    if (items[y, x] != null && !isFigure[y, x])
+                    if (items[y, x] != null && !isFigure[y, x] && !items[y, x].Explodable)
                     {
                         LineFigureSearch(x, y, minFigureLenght, coords, visited);
+                        coords = (new HashSet<Vector2Int>(coords.ToList())).ToList();
                         if (coords.Count >= minFigureLenght)
                         {
                             figures.Add(new Figure(coords));
@@ -267,8 +268,6 @@ namespace Project.Scripts.Game
             }
             
             FindAllNeighbours(target, coords, neighbours, visited);
-
-            coords = (new HashSet<Vector2Int>(coords.ToList())).ToList();
         }
 
         private void FindAllNeighbours(

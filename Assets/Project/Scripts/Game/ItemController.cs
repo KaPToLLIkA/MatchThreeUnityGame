@@ -38,6 +38,8 @@ namespace Project.Scripts.Game
         public CellType Type { get; private set; }
 
         public bool Movable { get; private set; } = false;
+
+        public bool Explodable { get; private set; } = false;
         
         public Vector2Int Coords
         {
@@ -80,6 +82,7 @@ namespace Project.Scripts.Game
 
         public void Explode()
         {
+            Explodable = true;
             StartCoroutine(AsyncExplode());
         }
         

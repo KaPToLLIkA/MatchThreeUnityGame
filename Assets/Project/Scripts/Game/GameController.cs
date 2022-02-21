@@ -33,11 +33,7 @@ namespace Project.Scripts.Game
             _field = new Field(lineLength, cells, _fieldSize, cellSize, cellsPadding, fieldGameObject);
             _cellSelector = new CellSelector();
             _field.InstantiateItems(itemPrefab, spawnerPrefab, _cellSelector);
-        }
-
-        private void Start()
-        {
-            
+            PlayerPrefs.SetInt("player_score", 0);
         }
 
         private void Update()
@@ -49,6 +45,10 @@ namespace Project.Scripts.Game
             if (figures.Count == 0) return;
             foreach (var figure in figures)
             {
+                var score = Mathf.RoundToInt(Mathf.Pow(2, figure.Coords.Count));
+                var oldScore = PlayerPrefs.GetInt("player_score", 0);
+                PlayerPrefs.SetInt("player_score", oldScore + score);
+                
                 foreach (var coord in figure.Coords)
                 {
                     _field[coord].Explode();
