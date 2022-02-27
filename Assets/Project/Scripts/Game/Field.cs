@@ -200,7 +200,8 @@ namespace Project.Scripts.Game
 
         public void ChangeItemAt(int x, int y, CellType type)
         {
-            if (items[y, x] != null && type != items[y, x].Type && items[y, x].Type != CellType.Spawner)
+            Debug.Log($"Change: {x} {y} {type}");
+            if (items[y, x] != null && type != CellType.Spawner && type != items[y, x].Type && items[y, x].Type != CellType.Spawner)
             {
                 Object.Destroy(items[y, x].gameObject);
                 var pos = GetCellWorldPos(x, y);
@@ -208,7 +209,7 @@ namespace Project.Scripts.Game
                     Object.Instantiate(itemGameObject, pos, Quaternion.identity, fieldGameObject.transform);
                 items[y, x] = itemGO.GetComponent<ItemController>();
                 items[y, x].Init(x, y, this, type, selector);
-            } else if (items[y, x] == null)
+            } else if (items[y, x] == null && type != CellType.Spawner)
             {
                 var pos = GetCellWorldPos(x, y);
                 var itemGO = 

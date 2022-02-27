@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 namespace Project.Scripts.Game.Git
@@ -19,7 +20,10 @@ namespace Project.Scripts.Game.Git
         
         public GitDifferenceEntry(int x, int y, CellType from, CellType to)
         {
-            
+            _x = x;
+            _y = y;
+            _from = from;
+            _to = to;
         }
     }
     
@@ -34,7 +38,11 @@ namespace Project.Scripts.Game.Git
         [SerializeField] private List<int> _childs;
         public int Id => _id;
         public int ParentId => _parentId;
-        
+
+        public List<int> Childs => _childs;
+
+        public string CommitText => _commitText;
+
         public GitNode(int id, GitNode parent, string msg, GitLastState lastState, Field curState)
         {
             _childs = new List<int>();
@@ -52,6 +60,7 @@ namespace Project.Scripts.Game.Git
                     if (curState[x, y] != null && lastState[x, y] != curState[x, y].Type)
                     {
                         _difference.Add(new GitDifferenceEntry(x, y, lastState[x, y], curState[x, y].Type));
+                        Debug.Log($"DIF: {x} {y} {lastState[x, y]} {curState[x, y].Type}");
                     }
                 }
             }

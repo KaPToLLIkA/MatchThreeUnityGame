@@ -10,7 +10,7 @@ namespace Project.Scripts.Game.UI
         public string scorePattern = "Score: {0}";
         
         private int _curScore;
-        
+
         private void Update()
         {
             _curScore = PlayerPrefs.GetInt("player_score", 0);
