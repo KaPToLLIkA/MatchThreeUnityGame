@@ -7,15 +7,9 @@ namespace Project.Scripts.Game.UI
     [RequireComponent(typeof(TMP_Text))]
     public class ListItemController : MonoBehaviour
     {
-        private TMP_Text field;
-
-        private void Start()
-        {
-            field = GetComponent<TMP_Text>();
-        }
-
         public void SetText(string text)
         {
+            var field = GetComponent<TMP_Text>();
             field.text = text;
         }
     }

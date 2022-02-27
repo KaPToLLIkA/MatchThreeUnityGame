@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -59,6 +60,9 @@ namespace Project.Scripts.Game
         private int minFigureLenght;
 
         private GameObject fieldGameObject;
+        private GameObject itemGameObject;
+        private GameObject spawnerGameObject;
+        private CellSelector selector;
         
         public Field(
             int minFigureLenght, 
@@ -129,7 +133,14 @@ namespace Project.Scripts.Game
             return false;
         }
 
-        public void InstantiateItems(GameObject item, GameObject spawner, CellSelector selector)
+        public void FillInstantiateParams(GameObject item, GameObject spawner, CellSelector selector)
+        {
+            spawnerGameObject = spawner;
+            itemGameObject = item;
+            this.selector = selector;
+        }
+        
+        public void InstantiateItems()
         {
             items = new ItemController[Rows, Columns];
             
@@ -141,18 +152,69 @@ namespace Project.Scripts.Game
                     if (cells[y, x] == CellType.Spawner)
                     {
                         var spawnerGO = 
-                            Object.Instantiate(spawner, pos, Quaternion.identity, fieldGameObject.transform);
+                            Object.Instantiate(spawnerGameObject, pos, Quaternion.identity, fieldGameObject.transform);
                         spawnerGO.GetComponent<SpawnerController>().Init(x, y, this, selector);
                         items[y, x] = null;
                     }
                     else
                     {
                         var itemGO = 
-                            Object.Instantiate(item, pos, Quaternion.identity, fieldGameObject.transform);
+                            Object.Instantiate(itemGameObject, pos, Quaternion.identity, fieldGameObject.transform);
                         items[y, x] = itemGO.GetComponent<ItemController>();
                         items[y, x].Init(x, y, this, cells[y, x], selector);
                     }
                 }
+            }
+        }
+
+        public void InstantiateItemsFrom(CellType[,] lastState)
+        {
+            for (int y = 0; y < Rows; ++y)
+            {
+                for (int x = 0; x < Columns; ++x)
+                {
+                    var pos = GetCellWorldPos(x, y);
+                    
+                    if (items[y, x] != null)
+                    {
+                        Object.Destroy(items[y, x].gameObject);
+                    }
+                    
+                    if (lastState[y, x] == CellType.Spawner)
+                    {
+                        var spawnerGO = 
+                            Object.Instantiate(spawnerGameObject, pos, Quaternion.identity, fieldGameObject.transform);
+                        spawnerGO.GetComponent<SpawnerController>().Init(x, y, this, selector);
+                        items[y, x] = null;
+                    }
+                    else
+                    {
+                        var itemGO = 
+                            Object.Instantiate(itemGameObject, pos, Quaternion.identity, fieldGameObject.transform);
+                        items[y, x] = itemGO.GetComponent<ItemController>();
+                        items[y, x].Init(x, y, this, lastState[y, x], selector);
+                    }
+                }
+            }
+        } 
+
+        public void ChangeItemAt(int x, int y, CellType type)
+        {
+            if (items[y, x] != null && type != items[y, x].Type && items[y, x].Type != CellType.Spawner)
+            {
+                Object.Destroy(items[y, x].gameObject);
+                var pos = GetCellWorldPos(x, y);
+                var itemGO = 
+                    Object.Instantiate(itemGameObject, pos, Quaternion.identity, fieldGameObject.transform);
+                items[y, x] = itemGO.GetComponent<ItemController>();
+                items[y, x].Init(x, y, this, type, selector);
+            } else if (items[y, x] == null)
+            {
+                var pos = GetCellWorldPos(x, y);
+                var itemGO = 
+                    Object.Instantiate(itemGameObject, pos, Quaternion.identity, fieldGameObject.transform);
+                items[y, x] = itemGO.GetComponent<ItemController>();
+                items[y, x].Init(x, y, this, type, selector);
             }
         }
 
