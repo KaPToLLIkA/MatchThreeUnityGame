@@ -24,6 +24,8 @@ namespace Project.Scripts.Game
         private CellSelector _cellSelector;
         private Vector2 _fieldSize;
 
+        public CellSelector CellSelector => _cellSelector;
+
         private void Awake()
         {
             var cells = new FieldGenerator().Generate(rows, columns);
@@ -33,7 +35,6 @@ namespace Project.Scripts.Game
             _field = new Field(lineLength, cells, _fieldSize, cellSize, cellsPadding, fieldGameObject);
             _cellSelector = new CellSelector();
             _field.InstantiateItems(itemPrefab, spawnerPrefab, _cellSelector);
-            PlayerPrefs.SetInt("player_score", 0);
         }
 
         private void Update()

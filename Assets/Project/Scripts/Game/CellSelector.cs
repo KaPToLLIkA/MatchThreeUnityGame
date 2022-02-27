@@ -7,8 +7,11 @@ namespace Project.Scripts.Game
         private ItemController _firstSelected = null;
         private ItemController _secondSelected = null;
 
+        public bool CanSelect { get; set; } = true;
+
         public void Select(ItemController selectable)
         {
+            if (!CanSelect) return;
             if (_firstSelected is null)
             {
                 _firstSelected = selectable;
